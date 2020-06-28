@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Groups", {
+    return queryInterface.createTable("customerCategories", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,14 +16,31 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
-      authType: {
-        type: Sequelize.STRING,
-        allowNull: false
+      parentId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: "customerCategory",
+          key: "id",
+          as: "customerCategoryParentId"
+        }
       },
-      deletable: {
+      active: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: true
+      },
+      deletedAt: {
+        allowNull: true,
+        type: Sequelize.DATE
+      },
+      createdBy: {
+        allowNull: true,
+        type: Sequelize.INTEGER
+      },
+      updatedBy: {
+        allowNull: true,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -32,28 +49,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      createdBy: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: "User",
-          key: "id",
-          as: "createdBy"
-        }
-      },
-      updatedBy: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: "User",
-          key: "id",
-          as: "updatedBy"
-        }
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("Groups");
+    return queryInterface.dropTable("customerCategories");
   }
 };

@@ -1,20 +1,23 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Group = sequelize.define(
-    "Group",
+  const customerCategory = sequelize.define(
+    "customerCategory",
     {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
       },
-
       description: DataTypes.TEXT,
-      authType: {
+      parentId: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
-      deletable: {
+      parentId: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      },
+      active: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true
@@ -30,21 +33,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  Group.associate = function(models) {
-    Group.hasMany(models.GroupPrivilege, {
-      foreignKey: "groupId",
-      as: "group_privileges"
-    });
-    Group.belongsTo(models.User, {
-      foreignKey: "createdBy",
-      as: "created_by",
-      constraints: false
-    });
-    Group.belongsTo(models.User, {
-      foreignKey: "updatedBy",
-      as: "updated_by",
-      constraints: false
+  customerCategory.associate = function(models) {
+    // associations can be defined here
+    customerCategory.belongsTo(models.customerCategory, {
+      foreignKey: "parentId",
+      as: "customer_category_parent"
     });
   };
-  return Group;
+  return customerCategory;
 };
